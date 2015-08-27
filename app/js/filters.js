@@ -1,27 +1,14 @@
 "use strict";
 
 angularMovieApp.filter('stars', function () {
-
-    var STARS = {
-        1: '\u2605',
-        2: '\u2605\u2605',
-        3: '\u2605\u2605\u2605',
-        4: '\u2605\u2605\u2605\u2605',
-        5: '\u2605\u2605\u2605\u2605\u2605'
-    };
-
-    return function(startCount) {
-        return STARS[startCount];
+    return function(inputValue) {
+        return Array(inputValue + 1).join("\u2605");
     };
 });
 
 
 angularMovieApp.filter('poster', function () {
-    return function(posterUrl) {
-        if(!posterUrl){
-            return "img/no-poster.jpg";
-        } else {
-            return posterUrl;
-        }
+    return function(inputValue) {
+        return inputValue || "img/no-poster.jpg";
     };
 });
