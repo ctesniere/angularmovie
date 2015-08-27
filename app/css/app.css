@@ -12,10 +12,6 @@ input::-webkit-inner-spin-button {
     -webkit-appearance: none;
 }
 
-.thumbnails .caption {
-    margin-left : 220px;
-}
-
 .thumbnails  img {
     padding-top: 20px;
     width: 160px;

@@ -6,11 +6,16 @@ angularMovieApp.directive("movielt", function () {
         replace: true,
         restrict: 'E',
         scope: {
-            movie: '=mymovie'
+            movie: '=mymovie',
+            index: '=index'
         },
         transclude: true,
-        controller: function ($scope, $element, $attrs, $transclude) {
-            console.log($scope, $element, $attrs, $transclude);
+        controller: function ($rootScope, $scope) {
+            $scope.deleteMovie = function () {
+                $scope.movie.$remove(function () {
+                    $rootScope.$emit('deleteMovie', $scope.movie);
+                });
+            };
         }
     };
 });

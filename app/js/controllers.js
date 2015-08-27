@@ -1,15 +1,18 @@
 "use strict";
 
-angularMovieApp.controller("homeController" ,function ($scope) {
+angularMovieApp.controller("homeController" ,function ($rootScope, $scope) {
 
     $scope.user = 'Thierry LAU';
 
 });
 
-angularMovieApp.controller("moviesController" ,function ($scope, Movie) {
+angularMovieApp.controller("moviesController" ,function ($rootScope, $scope, Movie) {
+
+    $scope.movies = Movie.query();
 
     // display mode by default
     $scope.tableView = false;
+
     // icon by mode by default
     $scope.tableViewIcon = 'icon-th icon-white';
 
@@ -24,17 +27,10 @@ angularMovieApp.controller("moviesController" ,function ($scope, Movie) {
         }
     };
 
-    Movie.fetch().success(function(resp){
-        $scope.movies = resp;
+    $rootScope.$on('deleteMovie', function (event, movie) {
+        $scope.movies.splice($scope.movies.indexOf(movie), 1);
+        event.stopPropagation();
     });
-
-    $scope.deleteMovie = function(index){
-        Movie.remove($scope.movies[index].id)
-            .success(function(resp){
-                $scope.movies.splice(index, 1);
-            }
-        );
-    };
 
 });
 
@@ -42,17 +38,15 @@ angularMovieApp.controller('editMovieController', function($scope, Movie, $route
 
      var movieId = $routeParams.id;
 
-    Movie.fetchOne(movieId).success(function(movie){
+    Movie.get({id : movieId}, function(movie){
        $scope.movie = movie;
     });
 
     $scope.updateMovie = function(movie){
-       Movie.update(movie)
-           .success(function(){
+       Movie.update(movie, function(){
                $location.path('/movies');
-           })
-           .error(function(resp){
-               console.log(resp);
+           }, function(resp){
+               console.error(resp);
            });
     };
 });
@@ -62,15 +56,13 @@ angularMovieApp.controller("movieFormController" ,function ($scope, Movie) {
     $scope.showAlert = false;
 
     $scope.addMovie = function(movie){
-        Movie.create(movie)
-            .success(function(){
+        Movie.save(movie, function(){
                 $scope.movies.push(movie);
                 $scope.movie = {};
                 $scope.showAlert = false;
                 $('#movie-form-modal').modal('hide');
-            })
-            .error(function(resp, statusCode){
-                console.log("Error : " + statusCode);
+            }, function(resp, statusCode){
+                console.error("Error : " + statusCode);
             });
     };
 });

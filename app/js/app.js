@@ -1,6 +1,6 @@
 "use strict";
 
-var angularMovieApp = angular.module('angularMovieApp', ['ngRoute']);
+var angularMovieApp = angular.module('angularMovieApp', ['ngRoute', 'ngResource']);
 
 angularMovieApp.config(function($routeProvider) {
     $routeProvider
